@@ -1,0 +1,17 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_HoleMakerTechnique.ipynb
+      - 01_HoleMakerRandom.ipynb
+      - 02_HoleMakerBounded.ipynb
+      - 03_HoleMakerAttention.ipynb
+      - 04_HoleMakerPoint.ipynb
+      - 10_HolesFilling.ipynb
+      - 11_CutOutRandom.ipynb
+      - 12_CutOutSemantic.ipynb
+      - 13_CutOutHideAndSeek.ipynb
+      - 14_CutMixRandom.ipynb
+      - 15_CutMixSemantic.ipynb
+      - 16_CutMixRICAP.ipynb
+      - 17_CutMixResizeMix.ipynb
