@@ -4,9 +4,9 @@
 __all__ = ['CutMixResizeMix']
 
 # %% ../17_CutMixResizeMix.ipynb 2
-from .HoleMakerTechnique import *
-from .HoleMakerBounded import *
-from .HolesFilling import *
+from .holeMakerTechnique import *
+from .holeMakerBounded import *
+from .holesFilling import *
 import numpy as np
 
 # %% ../17_CutMixResizeMix.ipynb 4

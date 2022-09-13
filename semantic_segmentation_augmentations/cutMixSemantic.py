@@ -4,9 +4,9 @@
 __all__ = ['CutMixSemantic']
 
 # %% ../15_CutMixSemantic.ipynb 2
-from .HoleMakerTechnique import *
-from .HoleMakerRandom import *
-from .HolesFilling import *
+from .holeMakerTechnique import *
+from .holeMakerRandom import *
+from .holesFilling import *
 import numpy as np
 
 # %% ../15_CutMixSemantic.ipynb 4

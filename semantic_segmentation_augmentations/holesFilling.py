@@ -4,8 +4,8 @@
 __all__ = ['HolesFilling']
 
 # %% ../10_HolesFilling.ipynb 2
-from .HoleMakerTechnique import *
-from .HoleMakerRandom import *
+from .holeMakerTechnique import *
+from .holeMakerRandom import *
 import numpy as np
 from fastai.vision.all import Callback
 from typing import Union, Callable

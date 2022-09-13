@@ -4,9 +4,9 @@
 __all__ = ['CutOutHideAndSeek']
 
 # %% ../13_CutOutHideAndSeek.ipynb 2
-from .HoleMakerTechnique import *
-from .HoleMakerPoint import *
-from .HolesFilling import *
+from .holeMakerTechnique import *
+from .holeMakerPoint import *
+from .holesFilling import *
 import numpy as np
 
 # %% ../13_CutOutHideAndSeek.ipynb 4

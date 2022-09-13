@@ -4,9 +4,9 @@
 __all__ = ['CutOutRandom']
 
 # %% ../11_CutOutRandom.ipynb 2
-from .HoleMakerTechnique import *
-from .HoleMakerRandom import *
-from .HolesFilling import *
+from .holeMakerTechnique import *
+from .holeMakerRandom import *
+from .holesFilling import *
 import numpy as np
 
 # %% ../11_CutOutRandom.ipynb 4
