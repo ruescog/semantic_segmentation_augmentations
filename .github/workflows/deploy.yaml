@@ -6,4 +6,4 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/quarto-ghp@master]
+    steps: [run: sudo pip install numpy, uses: fastai/workflows/quarto-ghp@master]
