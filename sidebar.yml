@@ -3,6 +3,7 @@ website:
     contents:
       - index.ipynb
       - 00_HoleMakerTechnique.ipynb
+      - 00_core.ipynb
       - 01_HoleMakerRandom.ipynb
       - 02_HoleMakerBounded.ipynb
       - 03_HoleMakerAttention.ipynb

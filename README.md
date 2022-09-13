@@ -19,25 +19,22 @@ use them.
 
 As these techniques modifies the input image changing some pixels
 regions for something else, those callbacks have been defined as the
-union of two subcomponents: the
-[`HoleMakerTechnique`](https://ruescog.github.io/semantic_segmentation_augmentations/holemakertechnique.html#holemakertechnique),
-that defines how to make the hole (how to select the region to replace)
-and the `HolesFilling`, that defines how to fill the region defined
-below (the way to fill the region gives the name to the technique used).
+union of two subcomponents: the `HoleMakerTechnique`, that defines how
+to make the hole (how to select the region to replace) and the
+`HolesFilling`, that defines how to fill the region defined below (the
+way to fill the region gives the name to the technique used).
 
-The
-[`HoleMakerTechnique`](https://ruescog.github.io/semantic_segmentation_augmentations/holemakertechnique.html#holemakertechnique)
-can be replaced in order to change the behavior of the selection of the
-region to replace. Doing so, you can use a CutOut technique that select
-the region randomly or based on the information bounded in that region.
+The `HoleMakerTechnique` can be replaced in order to change the behavior
+of the selection of the region to replace. Doing so, you can use a
+CutOut technique that select the region randomly or based on the
+information bounded in that region.
 
 You can also define your custom techniques defining how to fill a hole.
 You just need to extend the `HolesFilling` class and define the
 `before_bacth` (remember: we are using `callbacks` from `fastai`)
 abstract method. You will have two methods to simplify the process: the
-`make_hole` function, that uses the selected
-[`HoleMakerTechnique`](https://ruescog.github.io/semantic_segmentation_augmentations/holemakertechnique.html#holemakertechnique)
-to make the hole and returns two slices (the region boundaries) and the
+`make_hole` function, that uses the selected `HoleMakerTechnique` to
+make the hole and returns two slices (the region boundaries) and the
 `fill_hole` function, that fills the hole with something.
 
 ## How to use it
