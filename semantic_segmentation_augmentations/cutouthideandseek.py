@@ -8,6 +8,8 @@ from .holemakertechnique import *
 from .holemakerpoint import *
 from .holesfilling import *
 import numpy as np
+from random import random
+import torch
 
 # %% ../13_CutOutHideAndSeek.ipynb 4
 class CutOutHideAndSeek(HolesFilling):

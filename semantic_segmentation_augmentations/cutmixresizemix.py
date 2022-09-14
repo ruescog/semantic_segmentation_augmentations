@@ -8,6 +8,8 @@ from .holemakertechnique import *
 from .holemakerbounded import *
 from .holesfilling import *
 import numpy as np
+from random import random, randint
+import cv2
 
 # %% ../17_CutMixResizeMix.ipynb 4
 class CutMixResizeMix(HolesFilling):
@@ -27,8 +29,8 @@ class CutMixResizeMix(HolesFilling):
             for image, mask in zip(self.x, self.y):
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)
-                    sub_image, sub_mask = image[..., tf.newaxis], mask[..., tf.newaxis]
+                    sub_image, sub_mask = image[..., None], mask[..., None]
                     hole_size = self.hole_maker.hole_size
                     sub_image = TensorBase(cv2.resize(sub_image.cpu(), hole_size)[..., 0])
-                    sub_mask = TensorBase(tf.image.resize(sub_mask.cpu(), hole_size)[..., 0])
+                    sub_mask = TensorBase(cv2.resize(sub_mask.cpu(), hole_size)[..., 0])
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])

@@ -8,6 +8,8 @@ from .holemakertechnique import *
 from .holemakerrandom import *
 from .holesfilling import *
 import numpy as np
+from random import random
+import torch
 
 # %% ../12_CutOutSemantic.ipynb 4
 class CutOutSemantic(HolesFilling):

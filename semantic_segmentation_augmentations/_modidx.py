@@ -85,4 +85,3 @@ d = { 'settings': { 'branch': 'master',
                                                                                                                                                'semantic_segmentation_augmentations/holesfilling.py'),
                                                                   'semantic_segmentation_augmentations.holesfilling.HolesFilling.make_hole': ( 'holesfilling.html#make_hole',
                                                                                                                                                'semantic_segmentation_augmentations/holesfilling.py')}}}
-

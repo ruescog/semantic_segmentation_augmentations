@@ -8,6 +8,7 @@ from .holemakertechnique import *
 from .holemakerpoint import *
 from .holesfilling import *
 import numpy as np
+from random import random, randint
 
 # %% ../16_CutMixRICAP.ipynb 4
 class CutMixRICAP(HolesFilling):

@@ -8,6 +8,8 @@ from .holemakertechnique import *
 from .holemakerrandom import *
 from .holesfilling import *
 import numpy as np
+from random import random, randint
+import torch
 
 # %% ../15_CutMixSemantic.ipynb 4
 class CutMixSemantic(HolesFilling):

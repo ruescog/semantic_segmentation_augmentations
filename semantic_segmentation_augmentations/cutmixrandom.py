@@ -8,6 +8,7 @@ from .holemakertechnique import *
 from .holemakerrandom import *
 from .holesfilling import *
 import numpy as np
+from random import random
 
 # %% ../14_CutMixRandom.ipynb 4
 class CutMixRandom(HolesFilling):
