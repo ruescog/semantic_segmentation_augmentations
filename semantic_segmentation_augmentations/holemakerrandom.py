@@ -6,7 +6,7 @@ __all__ = ['HoleMakerRandom']
 # %% ../01_HoleMakerRandom.ipynb 3
 from .holemakertechnique import *
 import numpy as np
-from random import randint
+import random
 
 # %% ../01_HoleMakerRandom.ipynb 5
 class HoleMakerRandom(HoleMakerTechnique):
@@ -19,5 +19,5 @@ class HoleMakerRandom(HoleMakerTechnique):
              mask: np.ndarray): # The mask associated with the image where the hole is going to be made.
         "Defines how to make the hole."
         shape = mask.shape
-        randx, randy = randint(0, shape[1]), randint(0, shape[0])
+        randx, randy = random.randint(0, shape[1]), random.randint(0, shape[0])
         return [slice(randx, randx + self.hole_size[0]), slice(randy, randy + self.hole_size[1])]

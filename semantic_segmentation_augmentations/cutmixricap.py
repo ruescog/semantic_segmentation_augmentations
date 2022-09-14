@@ -8,7 +8,7 @@ from .holemakertechnique import *
 from .holemakerpoint import *
 from .holesfilling import *
 import numpy as np
-from random import random, randint
+import random
 
 # %% ../16_CutMixRICAP.ipynb 4
 class CutMixRICAP(HolesFilling):
@@ -23,7 +23,7 @@ class CutMixRICAP(HolesFilling):
   
     def before_batch(self):
         "Applies the CutMixRICAP technique (divides the image into a grid and shuffles the portions)."
-        if random() < self.p:
+        if random.random() < self.p:
             image_pieces = []
             mask_pieces = []
             holes = []

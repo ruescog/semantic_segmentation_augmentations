@@ -8,7 +8,7 @@ from .holemakertechnique import *
 from .holemakerpoint import *
 from .holesfilling import *
 import numpy as np
-from random import random
+import random
 import torch
 
 # %% ../13_CutOutHideAndSeek.ipynb 4
@@ -25,7 +25,7 @@ class CutOutHideAndSeek(HolesFilling):
 
     def before_batch(self):
         "Applies the CutOut Hide & Seek technique (divides the image into a grid and deactivates some portions with a determinated probability)."
-        if random() < self.p:
+        if random.random() < self.p:
             for image, mask in zip(self.x, self.y):
                 shape = image.shape[1:]
                 for randy in range(0, shape[0], self.hole_maker.hole_size[0]):

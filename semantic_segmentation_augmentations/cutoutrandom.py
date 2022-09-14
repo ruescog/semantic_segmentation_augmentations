@@ -8,7 +8,7 @@ from .holemakertechnique import *
 from .holemakerrandom import *
 from .holesfilling import *
 import numpy as np
-from random import random
+import random
 import torch
 
 # %% ../11_CutOutRandom.ipynb 4
@@ -24,7 +24,7 @@ class CutOutRandom(HolesFilling):
 
     def before_batch(self):
         "Applies the CutOut technique."
-        if random() < self.p:
+        if random.random() < self.p:
             for image, mask in zip(self.x, self.y):
                 min_image = torch.min(image)
                 for _ in range(self.holes_num):

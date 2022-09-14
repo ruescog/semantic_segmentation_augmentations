@@ -6,7 +6,7 @@ __all__ = ['HoleMakerAttention']
 # %% ../03_HoleMakerAttention.ipynb 3
 from .holemakertechnique import *
 import numpy as np
-from random import randint
+import random
 
 # %% ../03_HoleMakerAttention.ipynb 5
 class HoleMakerAttention(HoleMakerTechnique):
@@ -23,7 +23,7 @@ class HoleMakerAttention(HoleMakerTechnique):
         shape = mask.shape
         sub_mask_information = 0
         while sub_mask_information / (self.hole_size[0] * self.hole_size[1]) < self.attention_threshold:
-            randx, randy = randint(0, shape[1] - self.hole_size[1]), randint(0, shape[0] - self.hole_size[0])
+            randx, randy = random.randint(0, shape[1] - self.hole_size[1]), random.randint(0, shape[0] - self.hole_size[0])
             sub_mask = mask[[slice(randy, randy + self.hole_size[1]), slice(randx, randx + self.hole_size[0])]]
             sub_mask_information = sub_mask[sub_mask != 0].size().numel()
 
