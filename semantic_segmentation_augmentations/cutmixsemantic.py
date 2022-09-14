@@ -33,7 +33,7 @@ class CutMixSemantic(HolesFilling):
                     rand = random.randint(0, image.shape[0])
                     other_image, other_mask = self.x[rand], self.y[rand]
                     xhole, yhole = self.make_hole(mask)
-                    occlusion_value = self.occlusion_class if self.occlusion_class != -1 else randint(1, len(mask.unique()))
+                    occlusion_value = self.occlusion_class if self.occlusion_class != -1 else random.randint(1, len(mask.unique()))
                     sub_image, sub_mask = TensorBase(other_image[:, yhole, xhole]), TensorBase(other_mask[yhole, xhole])
                     replacement_mask = sub_mask == occlusion_value
                     sub_image[:, replacement_mask] = torch.min(image)

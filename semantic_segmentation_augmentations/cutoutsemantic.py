@@ -32,7 +32,7 @@ class CutOutSemantic(HolesFilling):
                 shape = image.shape[1:]
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)
-                    occlusion_value = self.occlusion_class if self.occlusion_class != -1 else randint(1, len(mask.unique()))
+                    occlusion_value = self.occlusion_class if self.occlusion_class != -1 else random.randint(1, len(mask.unique()))
                     sub_image, sub_mask = TensorBase(image[:, yhole, xhole]), TensorBase(mask[yhole, xhole])
                     replacement_mask = sub_mask == occlusion_value
                     sub_image[:, replacement_mask] = torch.min(image)

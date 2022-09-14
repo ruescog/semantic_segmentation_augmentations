@@ -30,7 +30,7 @@ class CutOutHideAndSeek(HolesFilling):
                 shape = image.shape[1:]
                 for randy in range(0, shape[0], self.hole_maker.hole_size[0]):
                     for randx in range(0, shape[1], self.hole_maker.hole_size[1]):
-                        if random() < self.deactivation_p:
+                        if random.random() < self.deactivation_p:
                             self.hole_maker.x = randx
                             self.hole_maker.y = randy
                             xhole, yhole = self.make_hole(mask)
