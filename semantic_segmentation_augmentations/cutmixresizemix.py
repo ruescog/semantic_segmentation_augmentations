@@ -10,6 +10,7 @@ from .holesfilling import *
 import numpy as np
 from random import random, randint
 import cv2
+from fastai.basics import *
 
 # %% ../17_CutMixResizeMix.ipynb 4
 class CutMixResizeMix(HolesFilling):

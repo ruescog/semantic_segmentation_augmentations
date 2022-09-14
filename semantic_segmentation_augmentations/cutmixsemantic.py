@@ -10,6 +10,7 @@ from .holesfilling import *
 import numpy as np
 from random import random, randint
 import torch
+from fastai.basics import *
 
 # %% ../15_CutMixSemantic.ipynb 4
 class CutMixSemantic(HolesFilling):
