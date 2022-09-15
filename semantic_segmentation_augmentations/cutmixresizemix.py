@@ -32,6 +32,6 @@ class CutMixResizeMix(HolesFilling):
                     xhole, yhole = self.make_hole(mask)
                     sub_image, sub_mask = image[..., None], mask[..., None]
                     hole_size = self.hole_maker.hole_size
-                    sub_image = TensorBase(cv2.resize(sub_image.cpu(), hole_size)[..., 0])
-                    sub_mask = TensorBase(cv2.resize(sub_mask.cpu(), hole_size)[..., 0])
+                    sub_image = TensorBase(cv2.resize(np.array(sub_image.cpu()), hole_size)[..., 0])
+                    sub_mask = TensorBase(cv2.resize(np.array(sub_mask.cpu()), hole_size)[..., 0])
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
