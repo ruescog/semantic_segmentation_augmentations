@@ -30,8 +30,11 @@ class CutMixResizeMix(HolesFilling):
             for image, mask in zip(self.x, self.y):
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)
-                    sub_image, sub_mask = image[..., None], mask[..., None]
+                    # It is needed to permute the image because opencv works with a (H,W,C) format
+                    sub_image, sub_mask = image.permute(1, 2, 0), mask.transpose(1, 0)
                     hole_size = self.hole_maker.hole_size
-                    sub_image = TensorBase(cv2.resize(np.array(sub_image.cpu()), hole_size)[..., 0])
-                    sub_mask = TensorBase(cv2.resize(np.array(sub_mask.cpu()), hole_size)[..., 0])
+                    sub_image = TensorBase(cv2.resize(np.array(sub_image.cpu()), hole_size))
+                    # It is needed to interpolate the integers without transforming them into floats
+                    sub_mask = TensorBase(cv2.resize(np.array(sub_mask.cpu()), hole_size, interpolation = cv2.INTER_LINEAR_EXACT))
+                    sub_image, sub_mask = sub_image.permute(2, 0, 1), sub_mask.transpose(1, 0)
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
