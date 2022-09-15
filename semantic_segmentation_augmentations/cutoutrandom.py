@@ -24,8 +24,8 @@ class CutOutRandom(HolesFilling):
 
     def before_batch(self):
         "Applies the CutOut technique."
-        if random.random() < self.p:
-            for image, mask in zip(self.x, self.y):
+        for image, mask in zip(self.x, self.y):
+            if random.random() < self.p:
                 min_image = torch.min(image)
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)

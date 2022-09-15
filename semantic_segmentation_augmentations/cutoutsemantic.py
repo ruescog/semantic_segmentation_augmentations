@@ -27,8 +27,8 @@ class CutOutSemantic(HolesFilling):
 
     def before_batch(self):
         "Applies the CutOut technique with semantic information (only applies the CutOut to a selected class)."
-        if random.random() < self.p:
-            for image, mask in zip(self.x, self.y):
+        for image, mask in zip(self.x, self.y):
+            if random.random() < self.p:
                 shape = image.shape[1:]
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)

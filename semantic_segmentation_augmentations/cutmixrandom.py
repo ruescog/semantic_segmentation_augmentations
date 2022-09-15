@@ -23,8 +23,8 @@ class CutMixRandom(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMix technique."
-        if random.random() < self.p:
-            for index, (image, mask) in enumerate(zip(self.x, self.y)):
+        for index, (image, mask) in enumerate(zip(self.x, self.y)):
+            if random.random() < self.p:
                 for _ in range(self.holes_num):
                     rand = random.randint(0, image.shape[0])
                     other_image, other_mask = self.x[rand], self.y[rand]

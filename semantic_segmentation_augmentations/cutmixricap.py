@@ -39,9 +39,9 @@ class CutMixRICAP(HolesFilling):
                         mask_pieces.append(mask[yhole, xhole])
                         holes.append([xhole, yhole])
 
-        for image, mask in zip(self.x, self.y):
-            for _ in range(4):
-                xhole, yhole = holes.pop()
-                rand = random.randint(0, len(image_pieces) - 1) if len(image_pieces) - 1 >= 0 else 0
-                sub_image, sub_mask = image_pieces.pop(rand), mask_pieces.pop(rand)
-                self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
+            for image, mask in zip(self.x, self.y):
+                for _ in range(4):
+                    xhole, yhole = holes.pop()
+                    rand = random.randint(0, len(image_pieces) - 1) if len(image_pieces) - 1 >= 0 else 0
+                    sub_image, sub_mask = image_pieces.pop(rand), mask_pieces.pop(rand)
+                    self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
