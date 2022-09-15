@@ -10,5 +10,11 @@
 - cv2 resize function ([#2](https://github.com/ruescog/semantic_segmentation_augmentations/issues/2))
   - The call to this function in class CutMixResizeMix is incorrect
 
+
+## 0.0.9
+
+
+### Bugs Squashed
+
 - Name random is not defined ([#1](https://github.com/ruescog/semantic_segmentation_augmentations/issues/1))
   - It is needed to add the random module.
