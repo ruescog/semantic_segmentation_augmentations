@@ -26,7 +26,7 @@ class CutMixRandom(HolesFilling):
         for index, (image, mask) in enumerate(zip(self.x, self.y)):
             if random.random() < self.p:
                 for _ in range(self.holes_num):
-                    rand = random.randint(0, image.shape[0])
+                    rand = random.randint(0, self.x.shape[0] - 1)
                     other_image, other_mask = self.x[rand], self.y[rand]
                     xhole, yhole = self.make_hole(mask)
                     sub_image, sub_mask = other_image[:, yhole, xhole], other_mask[yhole, xhole]
