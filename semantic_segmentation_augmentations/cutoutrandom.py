@@ -17,7 +17,7 @@ class CutOutRandom(HolesFilling):
     def __init__(self,
                  holes_num: int = 1, # The amount of holes to make.
                  hole_maker: "HoleMakerTechnique" = None, # The strategy used to make the holes.
-                 p = 1.0): # The probability of applying this technique.
+                 p = 0.5): # The probability of applying this technique.
         super().__init__(hole_maker)
         self.holes_num = holes_num
         self.p = p

@@ -17,7 +17,7 @@ class CutOutHideAndSeek(HolesFilling):
     def __init__(self,
                  deactivation_p = 0.1, # The probability of deactivate a region.
                  hole_maker: "HoleMakerTechnique" = None, # The strategy used to make the holes.
-                 p = 1.0): # The probability of applying this technique.
+                 p = 0.5): # The probability of applying this technique.
         hole_maker = hole_maker if hole_maker else HoleMakerPoint()
         super().__init__(hole_maker)
         self.deactivation_p = deactivation_p

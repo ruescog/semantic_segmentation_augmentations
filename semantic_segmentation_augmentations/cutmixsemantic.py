@@ -19,7 +19,7 @@ class CutMixSemantic(HolesFilling):
                  holes_num = 1, # The amount of holes to make.
                  occlusion_class = -1, # The class to remove. If -1, selects it randomly in each use.
                  hole_maker: "HoleMakerTechnique" = None, # The strategy used to make the holes.
-                 p = 1.0): # The probability of applying this technique.
+                 p = 0.5): # The probability of applying this technique.
         super().__init__(hole_maker)
         self.holes_num = holes_num
         self.occlusion_class = occlusion_class

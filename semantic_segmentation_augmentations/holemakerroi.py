@@ -13,16 +13,16 @@ import random
 class HoleMakerROI(HoleMakerTechnique):
     def __init__(self,
             ROI_class: int = -1, # The class that is going to be targeted to select as a ROI (region of interest).
-            ROI_area: int = 25 # The minimum area to be selected as a ROI
+            ROI_area: int = 25 # The minimum area to be selected as a ROI.
         ):
-        pass
+        self.holes = []
     
-    def get_hole(self,
+    def __get_holes__(self,
              mask: np.ndarray): # The mask associated with the image where the holes are going to be made.
         "Defines how to make the hole."
         # Gets the contours of the binary mask
         ROI_class = self.ROI_class if self.ROI_class != -1 else random.randint(1, np.unique(mask) - 1)
-        _mask = nask[mask != ROI_class] = 0
+        _mask = mask[mask != ROI_class] = 0
         contours, _ = cv2.findContours(_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
         # Extracts the ROIs
@@ -34,5 +34,17 @@ class HoleMakerROI(HoleMakerTechnique):
                 extractions.append(cv2.boundingRect(c))
         extractions = extractions[:np.argmax(areas)]
         
-        # Return all the possible holes
-        return [[slice(extraction[1], extraction[1] + extraction[3]), slice(extraction[0], extraction[0] + extraction[2])] for extraction in extractions]
+        # Saves all the possible holes
+        self.holes = [[slice(extraction[1], extraction[1] + extraction[3]), slice(extraction[0], extraction[0] + extraction[2])] for extraction in extractions]
+    
+    def get_hole(self,
+             mask: np.ndarray): # The mask associated with the image where the holes are going to be made.
+        "Defines how to make the hole."
+        if self.holes:
+            return self.holes.pop()
+        else:
+            self.__get_holes__(mask)
+            if self.holes:
+                return self.get_hole()
+            else:
+                raise Exception("The image hasn't got any ROIs")
