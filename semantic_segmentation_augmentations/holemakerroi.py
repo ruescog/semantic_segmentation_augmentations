@@ -26,7 +26,7 @@ class HoleMakerROI(HoleMakerTechnique):
              mask: np.ndarray): # The mask associated with the image where the holes are going to be made.
         "Defines how to make the hole."
         # Gets the contours of the binary mask
-        ROI_class = self.ROI_class if self.ROI_class != -1 else random.randint(1, np.unique(mask) - 1)
+        ROI_class = self.ROI_class if self.ROI_class != -1 else random.randint(1, np.unique(mask).shape[0] - 1)
         _mask = np.copy(mask)
         _mask[_mask != ROI_class] = 0
         contours, _ = cv2.findContours(_mask, cv2.RETR_FLOODFILL, cv2.CHAIN_APPROX_SIMPLE)
