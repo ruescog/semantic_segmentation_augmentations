@@ -20,4 +20,4 @@ class HoleMakerRandom(HoleMakerTechnique):
         "Defines how to make the hole."
         shape = mask.shape
         randx, randy = random.randint(0, shape[1]), random.randint(0, shape[0])
-        return [slice(randx, randx + self.hole_size[0]), slice(randy, randy + self.hole_size[1])]
+        return [slice(randx, randx + self.hole_size[1]), slice(randy, randy + self.hole_size[0])]

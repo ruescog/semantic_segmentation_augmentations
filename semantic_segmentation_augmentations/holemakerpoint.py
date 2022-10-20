@@ -19,4 +19,4 @@ class HoleMakerPoint(HoleMakerTechnique):
     def get_hole(self,
              mask: np.ndarray): # The mask associated with the image where the hole is going to be made.
         "Defines how to make the hole."
-        return [slice(self.x, self.x + self.hole_size[0]), slice(self.y, self.y + self.hole_size[1])]
+        return [slice(self.x, self.x + self.hole_size[1]), slice(self.y, self.y + self.hole_size[0])]

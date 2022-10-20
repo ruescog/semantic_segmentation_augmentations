@@ -24,7 +24,7 @@ class HoleMakerAttention(HoleMakerTechnique):
         sub_mask_information = 0
         while sub_mask_information / (self.hole_size[0] * self.hole_size[1]) < self.attention_threshold:
             randx, randy = random.randint(0, shape[1] - self.hole_size[1]), random.randint(0, shape[0] - self.hole_size[0])
-            sub_mask = mask[[slice(randy, randy + self.hole_size[1]), slice(randx, randx + self.hole_size[0])]]
+            sub_mask = mask[[slice(randy, randy + self.hole_size[0]), slice(randx, randx + self.hole_size[1])]]
             sub_mask_information = sub_mask[sub_mask != 0].size().numel()
 
-        return [slice(randx, randx + self.hole_size[0]), slice(randy, randy + self.hole_size[1])]
+        return [slice(randx, randx + self.hole_size[1]), slice(randy, randy + self.hole_size[0])]

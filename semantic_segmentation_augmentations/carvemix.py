@@ -6,6 +6,7 @@ __all__ = ['CarveMix']
 # %% ../18_CarveMix.ipynb 2
 from .holemakertechnique import *
 from .holemakerroi import *
+from .holemakerrandom import *
 from .holesfilling import *
 from .cutmixrandom import CutMixRandom
 import numpy as np
@@ -21,10 +22,12 @@ class CarveMix(HolesFilling):
                  ROI_class: int = -1, # The class to be used to select the ROI.
                  ROI_area: int = 25, # The minimum area to be selected as a ROI.
                  delta_ratio: float = None, # The ratio of pixels of the ROI that are going to be used. A ratio of 1 takes all the ROI pixels, a ratio < 1 crops the ROI and a ratio > 1 adds more pixels to the ROI. A None ratio takes a random value [0.9, 1.1) in each usage.
+                 random_position: bool = False, # Whether the ROI should be added randomly in the image or in the same position it was extracted.
                  p: float = 0.5): # The probability of applying this technique.
         hole_maker = HoleMakerROI(ROI_class, ROI_area, delta_ratio)
         super().__init__(hole_maker)
         self.holes_num = holes_num
+        self.random_position = random_position
         self.p = p
 
     def before_batch(self):
@@ -34,6 +37,11 @@ class CarveMix(HolesFilling):
                 for _ in range(self.holes_num):
                     rand = random.randint(0, self.x.shape[0] - 1)
                     other_image, other_mask = self.x[rand], self.y[rand]
-                    xhole, yhole = self.make_hole(other_mask)
-                    sub_image, sub_mask = other_image[:, yhole, xhole], other_mask[yhole, xhole]
+                    other_xhole, other_yhole = self.make_hole(other_mask)
+                    sub_image, sub_mask = other_image[:, other_yhole, other_xhole], other_mask[other_yhole, other_xhole]
+                    if self.random_position:
+                        xhole, yhole = HoleMakerBounded(hole_size = sub_mask.shape).get_hole(mask)
+                    else:
+                        xhole, yhole = other_xhole, other_yhole
+
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])

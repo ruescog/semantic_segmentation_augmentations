@@ -46,8 +46,8 @@ class HoleMakerROI(HoleMakerTechnique):
             # the ratio of pixels is calculated here in order to modify the ROI
             delta_ratio = self.delta_ratio if self.delta_ratio else random.random() / 5 + 0.9
             self.holes = [[
-                slice(int(delta_ratio * max(0, extraction[0])), int(delta_ratio * min(maxx, extraction[0] + extraction[2]))),
-                slice(int(delta_ratio * max(0, extraction[1])), int(delta_ratio * min(maxy, extraction[1] + extraction[3])))]
+                slice(int(1 / delta_ratio * max(0, extraction[0])), int(delta_ratio * min(maxx, extraction[0] + extraction[2]))),
+                slice(int(1 / delta_ratio * max(0, extraction[1])), int(delta_ratio * min(maxy, extraction[1] + extraction[3])))]
                 for extraction in extractions]
         else:
             self.holes = []
