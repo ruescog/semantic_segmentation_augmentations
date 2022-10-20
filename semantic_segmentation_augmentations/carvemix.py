@@ -6,7 +6,7 @@ __all__ = ['CarveMix']
 # %% ../18_CarveMix.ipynb 2
 from .holemakertechnique import *
 from .holemakerroi import *
-from .holemakerrandom import *
+from .holemakerbounded import *
 from .holesfilling import *
 from .cutmixrandom import CutMixRandom
 import numpy as np

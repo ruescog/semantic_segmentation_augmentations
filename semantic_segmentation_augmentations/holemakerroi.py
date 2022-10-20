@@ -5,7 +5,6 @@ __all__ = ['HoleMakerROI']
 
 # %% ../05_HoleMakerROI.ipynb 3
 from .holemakertechnique import *
-from .holemakerbounded import HoleMakerBounded
 import numpy as np
 import cv2
 import random
