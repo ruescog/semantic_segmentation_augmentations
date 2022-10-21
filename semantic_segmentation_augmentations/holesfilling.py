@@ -34,12 +34,17 @@ class HolesFilling(Callback):
                   yhole: slice, # The slice that defines the y-region where the hole is.
                   fill_values: Union[Callable[[np.ndarray], np.ndarray], np.ndarray, float]): # The value to fill the hole (a function to apply or a constant).
         "Fills a specific hole with something."
+<<<<<<< HEAD
         
         # If the values are matrixes, we can apply the modifier to them
         if not callable(fill_values[0]) and type(fill_values[0]) is not float \
            and not callable(fill_values[1]) and type(fill_values[1]) is not float:
             fill_values = self.modifier.apply(*list(map(lambda array: np.array(array.cpu()), fill_values)))
             fill_values = list(map(lambda array: torch.from_numpy(array).float().cuda(), fill_values))
+=======
+        if type(fill_values[0]) is np.ndarray and type(fill_values[1]) is np.ndarray:
+            fill_values = self.modifier.apply(*fill_values)
+>>>>>>> db2ce034f786e8ecf3e5e52bc4687f4abfda0cb8
 
         image[:, yhole, xhole] = fill_values[0](image) if callable(fill_values[0]) else fill_values[0]
         mask[yhole, xhole] = fill_values[1](mask) if callable(fill_values[1]) else fill_values[1]

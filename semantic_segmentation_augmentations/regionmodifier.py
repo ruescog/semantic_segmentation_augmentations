@@ -5,7 +5,10 @@ __all__ = ['RegionModifier']
 
 # %% ../10_RegionModifier.ipynb 2
 import numpy as np
+<<<<<<< HEAD
 from functools import reduce
+=======
+>>>>>>> db2ce034f786e8ecf3e5e52bc4687f4abfda0cb8
 from albumentations.core.composition import Compose
 
 # %% ../10_RegionModifier.ipynb 4
@@ -20,10 +23,17 @@ class RegionModifier():
               mask_region: np.ndarray # The region of the mask to be augmented.
         ):
         "Applies the augmnentations to the regions. Those augmnetations can not modify their shapes."
+<<<<<<< HEAD
         if self.taug: # and reduce(lambda old, new: old * new, mask_region.shape, 1) != 0:
+=======
+        if self.taug:
+>>>>>>> db2ce034f786e8ecf3e5e52bc4687f4abfda0cb8
             transformation = self.taug(image = image_region, mask = mask_region)
             image, mask = transformation["image"], transformation["mask"]
         else:
             image, mask = image_region, mask_region
+<<<<<<< HEAD
         
+=======
+>>>>>>> db2ce034f786e8ecf3e5e52bc4687f4abfda0cb8
         return image, mask
