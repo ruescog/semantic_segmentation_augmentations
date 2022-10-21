@@ -19,5 +19,5 @@ class HoleMakerRandom(HoleMakerTechnique):
              mask: np.ndarray): # The mask associated with the image where the hole is going to be made.
         "Defines how to make the hole."
         shape = mask.shape
-        randx, randy = random.randint(0, shape[1]), random.randint(0, shape[0])
+        randx, randy = random.randint(0, shape[1] - 1), random.randint(0, shape[0] - 1)
         return [slice(randx, randx + self.hole_size[1]), slice(randy, randy + self.hole_size[0])]

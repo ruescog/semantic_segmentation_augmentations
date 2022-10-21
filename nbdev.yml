@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "semantic_segmentation_augmentations"
+  site-url: "https://ruescog.github.io/semantic_segmentation_augmentations"
+  description: "A library to apply some data augmentations in semantic segmentation problems"
+  repo-branch: master
+  repo-url: "https://github.com/ruescog/semantic_segmentation_augmentations"
