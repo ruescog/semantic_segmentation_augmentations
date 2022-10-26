@@ -97,7 +97,6 @@ d = { 'settings': { 'branch': 'master',
                                                                                                                                               'semantic_segmentation_augmentations/holesfilling.py'),
                                                                   'semantic_segmentation_augmentations.holesfilling.HolesFilling.fill_hole': ( 'holesfilling.html#holesfilling.fill_hole',
                                                                                                                                                'semantic_segmentation_augmentations/holesfilling.py'),
-<<<<<<< HEAD
                                                                   'semantic_segmentation_augmentations.holesfilling.HolesFilling.make_hole': ( 'holesfilling.html#holesfilling.make_hole',
                                                                                                                                                'semantic_segmentation_augmentations/holesfilling.py')},
             'semantic_segmentation_augmentations.regionmodifier': { 'semantic_segmentation_augmentations.regionmodifier.RegionModifier': ( 'regionmodifier.html#regionmodifier',
@@ -105,13 +104,4 @@ d = { 'settings': { 'branch': 'master',
                                                                     'semantic_segmentation_augmentations.regionmodifier.RegionModifier.__init__': ( 'regionmodifier.html#regionmodifier.__init__',
                                                                                                                                                     'semantic_segmentation_augmentations/regionmodifier.py'),
                                                                     'semantic_segmentation_augmentations.regionmodifier.RegionModifier.apply': ( 'regionmodifier.html#regionmodifier.apply',
-=======
-                                                                  'semantic_segmentation_augmentations.holesfilling.HolesFilling.make_hole': ( 'holesfilling.html#make_hole',
-                                                                                                                                               'semantic_segmentation_augmentations/holesfilling.py')},
-            'semantic_segmentation_augmentations.regionmodifier': { 'semantic_segmentation_augmentations.regionmodifier.RegionModifier': ( 'regionmodifier.html#regionmodifier',
-                                                                                                                                           'semantic_segmentation_augmentations/regionmodifier.py'),
-                                                                    'semantic_segmentation_augmentations.regionmodifier.RegionModifier.__init__': ( 'regionmodifier.html#__init__',
-                                                                                                                                                    'semantic_segmentation_augmentations/regionmodifier.py'),
-                                                                    'semantic_segmentation_augmentations.regionmodifier.RegionModifier.apply': ( 'regionmodifier.html#apply',
->>>>>>> db2ce034f786e8ecf3e5e52bc4687f4abfda0cb8
                                                                                                                                                  'semantic_segmentation_augmentations/regionmodifier.py')}}}
