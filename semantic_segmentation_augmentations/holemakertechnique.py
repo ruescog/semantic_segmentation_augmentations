@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = []
 
-# %% ../00_HoleMakerTechnique.ipynb 2
+# %% ../00_HoleMakerTechnique.ipynb 1
 from .iholemakertechnique import HoleMakerTechnique
 from .holemakerrandom import HoleMakerRandom
 from .holemakerbounded import HoleMakerBounded
