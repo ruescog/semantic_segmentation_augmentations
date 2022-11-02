@@ -4,10 +4,13 @@
 __all__ = ['HoleMakerROI']
 
 # %% ../05_HoleMakerROI.ipynb 3
+# library
 from .iholemakertechnique import HoleMakerTechnique
-import numpy as np
+
+# others
 import cv2
 import random
+import numpy as np
 
 # %% ../05_HoleMakerROI.ipynb 5
 class HoleMakerROI(HoleMakerTechnique):

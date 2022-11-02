@@ -4,7 +4,10 @@
 __all__ = ['HoleMakerPoint']
 
 # %% ../04_HoleMakerPoint.ipynb 3
+# library
 from .iholemakertechnique import HoleMakerTechnique
+
+# others
 import numpy as np
 
 # %% ../04_HoleMakerPoint.ipynb 5
