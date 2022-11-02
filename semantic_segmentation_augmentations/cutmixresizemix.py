@@ -4,13 +4,16 @@
 __all__ = ['CutMixResizeMix']
 
 # %% ../27_CutMixResizeMix.ipynb 2
-from .holemakertechnique import *
-from .holemakerbounded import *
-from .holesfilling import *
-import numpy as np
-import random
+# library
+from .holemakertechnique import HoleMakerTechnique, HoleMakerBounded
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import cv2
+import random
 from fastai.basics import *
+import numpy as np
 
 # %% ../27_CutMixResizeMix.ipynb 4
 class CutMixResizeMix(HolesFilling):

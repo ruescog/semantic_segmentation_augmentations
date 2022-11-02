@@ -4,13 +4,16 @@
 __all__ = ['CutOutSemantic']
 
 # %% ../22_CutOutSemantic.ipynb 2
-from .holemakertechnique import *
-from .holemakerrandom import *
-from .holesfilling import *
-import numpy as np
+# library
+from .holemakertechnique import HoleMakerTechnique
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import random
 import torch
 from fastai.basics import *
+import numpy as np
 
 # %% ../22_CutOutSemantic.ipynb 4
 class CutOutSemantic(HolesFilling):

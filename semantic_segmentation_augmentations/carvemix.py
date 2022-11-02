@@ -4,15 +4,16 @@
 __all__ = ['CarveMix']
 
 # %% ../28_CarveMix.ipynb 2
-from .holemakertechnique import *
-from .holemakerroi import *
-from .holemakerbounded import *
-from .holesfilling import *
-from .cutmixrandom import CutMixRandom
-import numpy as np
-import random
+# library
+from .holemakertechnique import HoleMakerTechnique, HoleMakerROI, HoleMakerBounded
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import cv2
+import random
 from fastai.basics import *
+import numpy as np
 
 # %% ../28_CarveMix.ipynb 4
 class CarveMix(HolesFilling):

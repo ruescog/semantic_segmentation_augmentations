@@ -4,12 +4,15 @@
 __all__ = ['CutOutHideAndSeek']
 
 # %% ../23_CutOutHideAndSeek.ipynb 2
-from .holemakertechnique import *
-from .holemakerpoint import *
-from .holesfilling import *
-import numpy as np
+# library
+from .holemakertechnique import HoleMakerTechnique, HoleMakerPoint
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import random
 import torch
+import numpy as np
 
 # %% ../23_CutOutHideAndSeek.ipynb 4
 class CutOutHideAndSeek(HolesFilling):

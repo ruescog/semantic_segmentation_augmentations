@@ -4,11 +4,14 @@
 __all__ = ['CutMixRICAP']
 
 # %% ../26_CutMixRICAP.ipynb 2
-from .holemakertechnique import *
-from .holemakerpoint import *
-from .holesfilling import *
-import numpy as np
+# library
+from .holemakertechnique import HoleMakerTechnique, HoleMakerPoint
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import random
+import numpy as np
 
 # %% ../26_CutMixRICAP.ipynb 4
 class CutMixRICAP(HolesFilling):

@@ -4,11 +4,14 @@
 __all__ = ['CutMixRandom']
 
 # %% ../24_CutMixRandom.ipynb 2
-from .holemakertechnique import *
-from .holemakerrandom import *
-from .holesfilling import *
-import numpy as np
+# library
+from .holemakertechnique import HoleMakerTechnique
+from .regionmodifier import RegionModifier
+from .iholesfilling import HolesFilling
+
+# others
 import random
+import numpy as np
 
 # %% ../24_CutMixRandom.ipynb 4
 class CutMixRandom(HolesFilling):
