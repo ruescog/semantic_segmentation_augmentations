@@ -4,7 +4,7 @@
 __all__ = ['HoleMakerRandom']
 
 # %% ../01_HoleMakerRandom.ipynb 3
-from .holemakertechnique import *
+from .iholemakertechnique import HoleMakerTechnique
 import numpy as np
 import random
 

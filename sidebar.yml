@@ -3,15 +3,19 @@ website:
     contents:
       - index.ipynb
       - 00_HoleMakerTechnique.ipynb
+      - 00_IHoleMakerTechnique.ipynb
       - 01_HoleMakerRandom.ipynb
       - 02_HoleMakerBounded.ipynb
       - 03_HoleMakerAttention.ipynb
       - 04_HoleMakerPoint.ipynb
-      - 10_HolesFilling.ipynb
-      - 11_CutOutRandom.ipynb
-      - 12_CutOutSemantic.ipynb
-      - 13_CutOutHideAndSeek.ipynb
-      - 14_CutMixRandom.ipynb
-      - 15_CutMixSemantic.ipynb
-      - 16_CutMixRICAP.ipynb
-      - 17_CutMixResizeMix.ipynb
+      - 05_HoleMakerROI.ipynb
+      - 10_RegionModifier.ipynb
+      - 20_HolesFilling.ipynb
+      - 21_CutOutRandom.ipynb
+      - 22_CutOutSemantic.ipynb
+      - 23_CutOutHideAndSeek.ipynb
+      - 24_CutMixRandom.ipynb
+      - 25_CutMixSemantic.ipynb
+      - 26_CutMixRICAP.ipynb
+      - 27_CutMixResizeMix.ipynb
+      - 28_CarveMix.ipynb

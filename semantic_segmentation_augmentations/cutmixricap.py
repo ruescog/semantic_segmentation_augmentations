@@ -14,35 +14,38 @@ import random
 class CutMixRICAP(HolesFilling):
     "Defines the amount of holes, the technique used to make them and the probability of apply the technique."
     def __init__(self,
-                 holes_num = 1, # The amount of holes to make.
+                 t: float = 0.0, # The restriction of the central-boundary position. If 0.0, the central point is selected randomly. If not, the central point is restricted into [t * size, (1-t) * size] area.
+                 u: float = None, # The restriction of the corner-boundary position. If None, t hparam is used. If not, t hparam is ignored and u hparam is used to restrict the central point into a [0, u * size] U [(1-u) * size, size] area.
                  modifier: "RegionModifier" = None, # The modifier that defines the traditional augments to apply to the selected regions.
                  hole_maker: "HoleMakerTechnique" = None, # The strategy used to make the holes.
                  p = 0.5): # The probability of applying this technique.
         hole_maker = hole_maker if hole_maker else HoleMakerPoint()
         super().__init__(modifier, hole_maker)
+        self.t = t
+        self.u = u if t == None else None
         self.p = p
-  
+                    
     def before_batch(self):
         "Applies the CutMixRICAP technique (divides the image into a grid and shuffles the portions)."
         if random.random() < self.p:
-            image_pieces = []
-            mask_pieces = []
-            holes = []
             for image, mask in zip(self.x, self.y):
                 shape = image.shape[1:]
-                self.hole_maker.hole_size = (int(shape[1] / 2), int(shape[0] / 2))
-                for randy in range(0, shape[0], self.hole_maker.hole_size[1]):
-                    for randx in range(0, shape[1], self.hole_maker.hole_size[0]):
-                        self.hole_maker.x = randx
-                        self.hole_maker.y = randy
-                        xhole, yhole = self.make_hole(mask)
-                        image_pieces.append(image[:, yhole, xhole])
-                        mask_pieces.append(mask[yhole, xhole])
-                        holes.append([xhole, yhole])
+                if self.u == None:
+                    h = random.randint(int(self.t * shape[0]), int((1 - self.t) * (shape[0] - 1)))
+                    w = random.randint(int(self.t * shape[1]), int((1 - self.t) * (shape[1] - 1)))
+                else:
+                    h = random.randint(0, int(self.u * shape[0])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[0], shape[0] - 1))
+                    w = random.randint(0, int(self.u * shape[1])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[1], shape[1] - 1))
 
-            for image, mask in zip(self.x, self.y):
-                for _ in range(4):
-                    xhole, yhole = holes.pop()
-                    rand = random.randint(0, len(image_pieces) - 1) if len(image_pieces) - 1 >= 0 else 0
-                    sub_image, sub_mask = image_pieces.pop(rand), mask_pieces.pop(rand)
+                regions = [
+                    [slice(0, h), slice(0, w)],
+                    [slice(0, h), slice(w, shape[1])],
+                    [slice(h, shape[0]), slice(0, w)],
+                    [slice(h, shape[0]), slice(w, shape[1])]
+                ]
+                
+                for xhole, yhole in regions:
+                    rand = random.randint(0, self.x.shape[0] - 1)
+                    other_image, other_mask = self.x[rand], self.y[rand]
+                    sub_image, sub_mask = other_image[:, yhole, xhole], other_mask[yhole, xhole]
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
