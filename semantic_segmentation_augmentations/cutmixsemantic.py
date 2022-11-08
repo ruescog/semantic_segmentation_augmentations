@@ -31,11 +31,12 @@ class CutMixSemantic(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMix technique with semantic information (only applies the CutMix to a selected class)."
+        x, y = tensor(self.x).clone(), tensor(self.y).clone() # tensor is defined in fastai.basics
         for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
                 for _ in range(self.holes_num):
                     rand = random.randint(0, self.x.shape[0] - 1)
-                    other_image, other_mask = self.x[rand], self.y[rand]
+                    other_image, other_mask = x[rand], y[rand]
                     xhole, yhole = self.make_hole(mask)
                     occlusion_value = self.occlusion_class if self.occlusion_class != -1 else random.randint(1, len(mask.unique()) - 1)
                     sub_image, sub_mask = TensorBase(other_image[:, yhole, xhole]), TensorBase(other_mask[yhole, xhole])

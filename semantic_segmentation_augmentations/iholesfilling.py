@@ -11,7 +11,7 @@ from .regionmodifier import RegionModifier
 # others
 import torch
 import numpy as np
-from fastai.vision.all import Callback
+from fastai.vision.all import Callback, TensorBase
 
 # typedpython
 from typing import Union, Callable
@@ -40,8 +40,7 @@ class HolesFilling(Callback):
         "Fills a specific hole with something."
         
         # If the values are matrixes, we can apply the modifier to them
-        if not callable(fill_values[0]) and type(fill_values[0]) is not float \
-           and not callable(fill_values[1]) and type(fill_values[1]) is not float:
+        if isinstance(fill_values[0], TensorBase) and isinstance(fill_values[1], TensorBase):
             fill_values = self.modifier.apply(*list(map(lambda array: np.array(array.cpu()), fill_values)))
             fill_values = list(map(lambda array: torch.from_numpy(array).float().cuda(), fill_values))
 

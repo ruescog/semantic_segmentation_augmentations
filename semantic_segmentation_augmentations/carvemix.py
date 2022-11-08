@@ -34,14 +34,15 @@ class CarveMix(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMix technique."
-        for index, (image, mask) in enumerate(zip(self.x, self.y)):
+        x, y = tensor(self.x).clone(), tensor(self.y).clone() # tensor is defined in fastai.basics
+        for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
                 for _ in range(self.holes_num):
-                    rand = random.randint(0, self.x.shape[0] - 1)
-                    other_image, other_mask = self.x[rand], self.y[rand]
+                    rand = random.randint(0, x.shape[0] - 1)
+                    other_image, other_mask = x[rand], y[rand]
                     other_xhole, other_yhole = self.make_hole(other_mask)
                     sub_image, sub_mask = other_image[:, other_yhole, other_xhole], other_mask[other_yhole, other_xhole]
-                    if self.random_position:
+                    if self.random_position and not other_mask.shape == sub_mask.shape: # if other_mask == sub_mask, a full ROI region is selected and HMBounded can not be used.
                         xhole, yhole = HoleMakerBounded(hole_size = sub_mask.shape).get_hole(mask)
                     else:
                         xhole, yhole = other_xhole, other_yhole

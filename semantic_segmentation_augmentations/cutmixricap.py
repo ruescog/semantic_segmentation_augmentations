@@ -11,6 +11,7 @@ from .iholesfilling import HolesFilling
 
 # others
 import random
+from fastai.basics import *
 import numpy as np
 
 # %% ../26_CutMixRICAP.ipynb 4
@@ -30,25 +31,26 @@ class CutMixRICAP(HolesFilling):
                     
     def before_batch(self):
         "Applies the CutMixRICAP technique (divides the image into a grid and shuffles the portions)."
-        if random.random() < self.p:
-            for image, mask in zip(self.x, self.y):
+        x, y = tensor(self.x).clone(), tensor(self.y).clone() # tensor is defined in fastai.basics
+        for image, mask in zip(self.x, self.y):
+            if random.random() < self.p:
                 shape = image.shape[1:]
                 if self.u == None:
                     h = random.randint(int(self.t * shape[0]), int((1 - self.t) * (shape[0] - 1)))
                     w = random.randint(int(self.t * shape[1]), int((1 - self.t) * (shape[1] - 1)))
                 else:
-                    h = random.randint(0, int(self.u * shape[0])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[0], shape[0] - 1))
-                    w = random.randint(0, int(self.u * shape[1])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[1], shape[1] - 1))
-
+                    h = random.randint(0, int(self.u * shape[0])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[0]), shape[0] - 1)
+                    w = random.randint(0, int(self.u * shape[1])) if random.random() < 0.5 else random.randint(int((1 - self.u) * shape[1]), shape[1] - 1)
+                
                 regions = [
                     [slice(0, h), slice(0, w)],
-                    [slice(0, h), slice(w, shape[1])],
-                    [slice(h, shape[0]), slice(0, w)],
-                    [slice(h, shape[0]), slice(w, shape[1])]
+                    [slice(0, h), slice(w, shape[0])],
+                    [slice(h, shape[1]), slice(0, w)],
+                    [slice(h, shape[1]), slice(w, shape[0])]
                 ]
-                
+
                 for xhole, yhole in regions:
-                    rand = random.randint(0, self.x.shape[0] - 1)
-                    other_image, other_mask = self.x[rand], self.y[rand]
+                    rand = random.randint(0, x.shape[0] - 1)
+                    other_image, other_mask = x[rand], y[rand]
                     sub_image, sub_mask = other_image[:, yhole, xhole], other_mask[yhole, xhole]
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])

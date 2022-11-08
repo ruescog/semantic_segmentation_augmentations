@@ -11,6 +11,7 @@ from .iholesfilling import HolesFilling
 
 # others
 import random
+from fastai.basics import *
 import numpy as np
 
 # %% ../24_CutMixRandom.ipynb 4
@@ -27,11 +28,12 @@ class CutMixRandom(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMix technique."
-        for index, (image, mask) in enumerate(zip(self.x, self.y)):
+        x, y = tensor(self.x).clone(), tensor(self.y).clone() # tensor is defined in fastai.basics
+        for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
                 for _ in range(self.holes_num):
                     rand = random.randint(0, self.x.shape[0] - 1)
-                    other_image, other_mask = self.x[rand], self.y[rand]
+                    other_image, other_mask = x[rand], y[rand]
                     xhole, yhole = self.make_hole(mask)
                     sub_image, sub_mask = other_image[:, yhole, xhole], other_mask[yhole, xhole]
                     self.fill_hole(image, mask, xhole, yhole, [sub_image, sub_mask])
