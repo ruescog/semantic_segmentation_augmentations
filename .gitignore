@@ -152,4 +152,7 @@ checklink/cookies.txt
 /.quarto/
 
 # Dataset
-*/dataset/*
+dataset/
+
+# nbdev_prepare
+/_proc
