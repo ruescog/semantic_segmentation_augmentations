@@ -36,13 +36,15 @@ class HolesFilling(Callback):
                   mask: np.ndarray, # The mask associated with the image where the hole is going to be made.
                   xhole: slice, # The slice that defines the x-region where the hole is.
                   yhole: slice, # The slice that defines the y-region where the hole is.
-                  fill_values: Union[Callable[[np.ndarray], np.ndarray], np.ndarray, float]): # The value to fill the hole (a function to apply or a constant).
+                  fill_values: Union[Callable[[np.ndarray], np.ndarray], np.ndarray, float], # The value to fill the hole (a function to apply or a constant).
+                  transparence: False # Whether the fill_values must be added to the image in a transparent form. fill_value if fill_value else image for each value in fill_values
+                 ): 
         "Fills a specific hole with something."
         
         # If the values are matrixes, we can apply the modifier to them
         if isinstance(fill_values[0], TensorBase) and isinstance(fill_values[1], TensorBase):
             fill_values = self.modifier.apply(*list(map(lambda array: np.array(array.cpu()), fill_values)))
             fill_values = list(map(lambda array: torch.from_numpy(array).float().cuda(), fill_values))
-
-        image[:, yhole, xhole] = fill_values[0](image) if callable(fill_values[0]) else fill_values[0]
-        mask[yhole, xhole] = fill_values[1](mask) if callable(fill_values[1]) else fill_values[1]
+    
+        image[:, yhole, xhole] = torch.where(fill_values[1][np.newaxis, ...] != 0, fill_values[0], image[:, yhole, xhole]) if transparence else fill_values[0]
+        mask[yhole, xhole] = torch.where(fill_values[1] != 0, fill_values[1], mask[yhole, xhole]) if transparence else fill_values[1]

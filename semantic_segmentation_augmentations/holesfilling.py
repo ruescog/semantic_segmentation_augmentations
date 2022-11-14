@@ -13,3 +13,5 @@ from .cutmixsemantic import CutMixSemantic
 from .cutmixricap import CutMixRICAP
 from .cutmixresizemix import CutMixResizeMix
 from .carvemix import CarveMix
+from .transparencemix import TransparenceMix
+from .selfmix import SelfMix
