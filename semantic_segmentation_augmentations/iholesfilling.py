@@ -25,6 +25,7 @@ class HolesFilling(Callback):
         ):
         self.modifier = modifier if modifier else RegionModifier()
         self.hole_maker = hole_maker if hole_maker else HoleMakerRandom()
+        self.training = False
 
     def make_hole(self,
                   mask): # The mask associated with the image where the hole is going to be made.
@@ -48,3 +49,12 @@ class HolesFilling(Callback):
     
         image[:, yhole, xhole] = torch.where(fill_values[1][np.newaxis, ...] != 0, fill_values[0], image[:, yhole, xhole]) if transparence else fill_values[0]
         mask[yhole, xhole] = torch.where(fill_values[1] != 0, fill_values[1], mask[yhole, xhole]) if transparence else fill_values[1]
+        
+    # augmentations must only be applied on training set, so we will change the value of 'training' flag before validating to avoid the aplication of the augments.
+    def before_train(self):
+        "Sets the training flag to True"
+        self.training = True
+    
+    def after_train(self):
+        "Sets the training flag to False"
+        self.training = False

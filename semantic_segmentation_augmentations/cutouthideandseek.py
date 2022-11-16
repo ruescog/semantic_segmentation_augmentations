@@ -29,6 +29,10 @@ class CutOutHideAndSeek(HolesFilling):
 
     def before_batch(self):
         "Applies the CutOut Hide & Seek technique (divides the image into a grid and deactivates some portions with a determinated probability)."
+        
+        if not self.training:
+            return
+    
         for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
                 shape = image.shape[1:]

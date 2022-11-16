@@ -30,6 +30,10 @@ class CutMixResizeMix(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMixResizeMix technique (fills a hole with the whole resized image)."
+        
+        if not self.training:
+            return
+        
         for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
                 for _ in range(self.holes_num):

@@ -30,6 +30,10 @@ class TransparenceMix(HolesFilling):
 
     def before_batch(self):
         "Applies the CutMix technique."
+        
+        if not self.training:
+            return
+        
         x, y = tensor(self.x).clone(), tensor(self.y).clone() # tensor is defined in fastai.basics
         for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
