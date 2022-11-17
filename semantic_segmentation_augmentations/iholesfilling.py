@@ -38,7 +38,7 @@ class HolesFilling(Callback):
                   xhole: slice, # The slice that defines the x-region where the hole is.
                   yhole: slice, # The slice that defines the y-region where the hole is.
                   fill_values: Union[Callable[[np.ndarray], np.ndarray], np.ndarray, float], # The value to fill the hole (a function to apply or a constant).
-                  transparence: False # Whether the fill_values must be added to the image in a transparent form. fill_value if fill_value else image for each value in fill_values
+                  transparence: bool = False # Whether the fill_values must be added to the image in a transparent form. fill_value if fill_value else image for each value in fill_values
                  ): 
         "Fills a specific hole with something."
         
