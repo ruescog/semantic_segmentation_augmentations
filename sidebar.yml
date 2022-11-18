@@ -10,12 +10,15 @@ website:
       - 04_HoleMakerPoint.ipynb
       - 05_HoleMakerROI.ipynb
       - 10_RegionModifier.ipynb
+      - 201_CutOutRandom.ipynb
+      - 202_CutOutSemantic.ipynb
+      - 203_HideAndSeek.ipynb
+      - 204_CutMixRandom.ipynb
+      - 205_CutMixSemantic.ipynb
+      - 206_RICAP.ipynb
+      - 207_ResizeMix.ipynb
+      - 208_CarveMix.ipynb
+      - 209_TransparenceMix.ipynb
       - 20_HolesFilling.ipynb
-      - 21_CutOutRandom.ipynb
-      - 22_CutOutSemantic.ipynb
-      - 23_CutOutHideAndSeek.ipynb
-      - 24_CutMixRandom.ipynb
-      - 25_CutMixSemantic.ipynb
-      - 26_CutMixRICAP.ipynb
-      - 27_CutMixResizeMix.ipynb
-      - 28_CarveMix.ipynb
+      - 20_IHolesFilling.ipynb
+      - 210_SelfMix.ipynb
