@@ -7,11 +7,11 @@ __all__ = []
 from .iholesfilling import HolesFilling
 from .cutoutrandom import CutOutRandom
 from .cutoutsemantic import CutOutSemantic
-from .cutouthideandseek import CutOutHideAndSeek
+from .hideandseek import HideAndSeek
 from .cutmixrandom import CutMixRandom
 from .cutmixsemantic import CutMixSemantic
-from .cutmixricap import CutMixRICAP
-from .cutmixresizemix import CutMixResizeMix
+from .ricap import RICAP
+from .resizemix import ResizeMix
 from .carvemix import CarveMix
 from .transparencemix import TransparenceMix
 from .selfmix import SelfMix
