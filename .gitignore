@@ -154,6 +154,9 @@ checklink/cookies.txt
 # Dataset
 dataset/
 
+# Models
+models/
+
 # nbdev_prepare
 /_proc
 /test/ECPA-Data.ipynb
