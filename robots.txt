@@ -1,0 +1,1 @@
+Sitemap: https://ruescog.github.io/semantic_segmentation_augmentations/sitemap.xml

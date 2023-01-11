@@ -1,0 +1,149 @@
+[
+  {
+    "objectID": "holemakerpoint.html",
+    "href": "holemakerpoint.html",
+    "title": "HoleMakerPoint",
+    "section": "",
+    "text": "HoleMakerPoint selects the region to be replaced using a reference point. The region is expanded from this point depending on its size. When using this technique, it is needed to manually modify the x and y attributes for the HoleMakerPoint.\n\nsource\n\nHoleMakerPoint\n\n HoleMakerPoint (hole_size:tuple=(100, 100))\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nhole_size\ntuple\n(100, 100)\nThe size of the hole in a tuple like (y, x).\n\n\n\n\nsource\n\n\nHoleMakerPoint.get_hole\n\n HoleMakerPoint.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the hole is going to be made."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "semantic_segmentation_augmentations",
+    "section": "",
+    "text": "Data augmentation is a regularisation technique that generates new training samples from the original dataset by applying colour or geometric transformations. Although this technique has been applied in other computer vision fields, such as image classification or object detection, the application of this technique in semantic segmentation is not yet widespread.\nThis library groups some data augmentation techniques for semantic augmentation, such as CutOut or CutMix.\n\nInstall\nTo install the library, run:\npip install semantic_segmentation_augmentations\n\n\nHow it works\nThis data augmentation techniques are defined as fastai callbacks. Given this fact, you need to train your models using fastai’s API to use them.\nAs these techniques modifies the input image changing some pixels regions for something else, those callbacks have been defined as the union of two subcomponents: the HoleMakerTechnique, that defines how to make the hole (how to select the region to replace) and the HolesFilling, that defines how to fill the region defined below (the way to fill the region gives the name to the technique used).\nThe HoleMakerTechnique can be replaced in order to change the behavior of the selection of the region to replace. Doing so, you can use a CutOut technique that select the region randomly or based on the information bounded in that region.\nYou can also define your custom techniques defining how to fill a hole. You just need to extend the HolesFilling class and define the before_bacth (remember: we are using callbacks from fastai) abstract method. You will have two methods to simplify the process: the make_hole function, that uses the selected HoleMakerTechnique to make the hole and returns two slices (the region boundaries) and the fill_hole function, that fills the hole with something.\n\n\nHow to use it\nIn order to use these techniques, you just need to define the Learner from fastai with the Callbacks that represent the techniques that you want to use.\nFor example, if you want to create an U-net Leaner with resnet18 backbone and use the CutOut technique with HoleMakerRandom as region selection techinique (which is the default one), you just need to import it:\nfrom semantic_segmentation_augmentations.holesfilling import CutOutRandom\nAnd add it to your learner:\nlearner = unet_learner(dls, resnet18, cbs = CutOutRandom(hole_maker = HoleMakerRandom()))\nIf you want to change the default behaviour of the CutOutRandom technique (i. e. to select the region with a HoleMakerAttention technique), you just need to define the technique as follows:\nlearner = unet_learner(dls, resnet18, cbs = CutOutRandom(hole_maker = HoleMakerAttention(attention_threshold = 0.25, hole_size = (150, 150))))\nFinally, you can apply geometrical augments to the selected regions (using the Albumentations augments). Maybe this augmnets are not useful with the CutOut techniques, but with the CutMix ones. In order to do so, you just need to implement a RegionModifier with a list with the augments to apply:\nlearner = unet_learner( dls,\n                        resnet18,\n                        cbs = CutMixRandom( holes_num = 1,\n                                            modifier = RegionModifier(A.Compose([A.Blur(), A.GaussNoise()])),\n                                            hole_maker = HoleMakerRandom((250, 250)),\n                                            p = 1\n                        )\n                      )"
+  },
+  {
+    "objectID": "transparencemix.html",
+    "href": "transparencemix.html",
+    "title": "TransparenceMix",
+    "section": "",
+    "text": "source\n\nTransparenceMix\n\n TransparenceMix (holes_num:int=1, modifier:RegionModifier=None,\n                  hole_maker:HoleMakerTechnique=None, p:float=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nTranspareceMix allows us to fuse two images with the transparence idea. That is: if the overlapping mask has some information (it is not 0 in that position), its value is selected. Otherwise, if the overlapping mask has no information in that pixel, the information of the second image is used to fulfill the final image. Thus allows us to preserve as maximum information as possible, since these information is selected before using the background class.\n\nsource\n\n\nTransparenceMix.before_batch\n\n TransparenceMix.before_batch ()\n\nApplies the CutMix technique."
+  },
+  {
+    "objectID": "regionmodifier.html",
+    "href": "regionmodifier.html",
+    "title": "RegionModifier",
+    "section": "",
+    "text": "source\n\nRegionModifier\n\n RegionModifier (taug:albumentations.core.composition.Compose=None)\n\nDefines the traditional augmentations to be applied.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntaug\nCompose\nNone\nThe Compose of the transformations to be applied.\n\n\n\n\nsource\n\n\nRegionModifier.apply\n\n RegionModifier.apply (image_region:numpy.ndarray,\n                       mask_region:numpy.ndarray)\n\nApplies the augmnentations to the regions. Those augmnetations can not modify their shapes.\n\n\n\n\nType\nDetails\n\n\n\n\nimage_region\nndarray\nThe region of the image to be augmented.\n\n\nmask_region\nndarray\nThe region of the mask to be augmented."
+  },
+  {
+    "objectID": "holemakerattention.html",
+    "href": "holemakerattention.html",
+    "title": "HoleMakerAttention",
+    "section": "",
+    "text": "HoleMakerAttention selects the region to be replaced using the information of that region. The region must have at least p pixels belowing to any relevant class (not the background), where p is a ratio fixed by the user.\n\nsource\n\nHoleMakerAttention\n\n HoleMakerAttention (attention_threshold:float=0.1, hole_size:tuple=(100,\n                     100))\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nattention_threshold\nfloat\n0.1\nThe ratio of relevant pixels in the selected region.\n\n\nhole_size\ntuple\n(100, 100)\nThe size of the hole in a tuple like (y, x).\n\n\n\n\nsource\n\n\nHoleMakerAttention.get_hole\n\n HoleMakerAttention.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the hole is going to be made."
+  },
+  {
+    "objectID": "cutoutrandom.html",
+    "href": "cutoutrandom.html",
+    "title": "CutOutRandom",
+    "section": "",
+    "text": "source\n\nCutOutRandom\n\n CutOutRandom (holes_num:int=1, modifier:RegionModifier=None,\n               hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerRandom technique.\nCutOut technique was defined and implemented here.\n\nsource\n\n\nCutOutRandom.before_batch\n\n CutOutRandom.before_batch ()\n\nApplies the CutOut technique."
+  },
+  {
+    "objectID": "holemakerroi.html",
+    "href": "holemakerroi.html",
+    "title": "HoleMakerROI",
+    "section": "",
+    "text": "HoleMakerROI selects the region to be replaced using the information of that region. In this case, a whole group of pixels of the same class is selected and grouped in the region.\n\nsource\n\nHoleMakerROI\n\n HoleMakerROI (ROI_class:int=-1, ROI_area:int=25, delta_ratio:float=None)\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nROI_class\nint\n-1\nThe class that is going to be targeted to select as a ROI (region of interest).\n\n\nROI_area\nint\n25\nThe minimum area to be selected as a ROI.\n\n\ndelta_ratio\nfloat\nNone\nThe ratio of pixels of the ROI that are going to be used. A ratio of 1 takes all the ROI pixels, a ratio < 1 crops the ROI and a ratio > 1 adds more pixels to the ROI. A None ratio takes a random value [0.9, 1.1) in each usage.\n\n\n\n\nsource\n\n\nHoleMakerROI.get_hole\n\n HoleMakerROI.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the holes are going to be made."
+  },
+  {
+    "objectID": "cutmixsemantic.html",
+    "href": "cutmixsemantic.html",
+    "title": "CutMixSemantic",
+    "section": "",
+    "text": "source\n\nCutMixSemantic\n\n CutMixSemantic (holes_num=1, occlusion_class=-1,\n                 modifier:RegionModifier=None,\n                 hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nocclusion_class\nint\n-1\nThe class to remove. If -1, selects it randomly in each use.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerRandom technique.\nCutMix technique was defined and implemented here.\n\nsource\n\n\nCutMixSemantic.before_batch\n\n CutMixSemantic.before_batch ()\n\nApplies the CutMix technique with semantic information (only applies the CutMix to a selected class)."
+  },
+  {
+    "objectID": "cutmixrandom.html",
+    "href": "cutmixrandom.html",
+    "title": "CutMixRandom",
+    "section": "",
+    "text": "source\n\nCutMixRandom\n\n CutMixRandom (holes_num=1, modifier:RegionModifier=None,\n               hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerRandom technique.\nCutMix technique was defined and implemented here.\n\nsource\n\n\nCutMixRandom.before_batch\n\n CutMixRandom.before_batch ()\n\nApplies the CutMix technique."
+  },
+  {
+    "objectID": "holemakerrandom.html",
+    "href": "holemakerrandom.html",
+    "title": "HoleMakerRandom",
+    "section": "",
+    "text": "HoleMakerRandom randomly selects the region to be replaced.\n\nsource\n\nHoleMakerRandom\n\n HoleMakerRandom (hole_size:tuple=(100, 100))\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nhole_size\ntuple\n(100, 100)\nThe size of the hole in a tuple like (y, x).\n\n\n\n\nsource\n\n\nHoleMakerRandom.get_hole\n\n HoleMakerRandom.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the hole is going to be made."
+  },
+  {
+    "objectID": "resizemix.html",
+    "href": "resizemix.html",
+    "title": "ResizeMix",
+    "section": "",
+    "text": "source\n\nResizeMix\n\n ResizeMix (holes_num=1, modifier:RegionModifier=None,\n            hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerBounded technique.\nResizeMix was defined and implemented here.\n\nsource\n\n\nResizeMix.before_batch\n\n ResizeMix.before_batch ()\n\nApplies the CutMixResizeMix technique (fills a hole with the whole resized image)."
+  },
+  {
+    "objectID": "iholesfilling.html",
+    "href": "iholesfilling.html",
+    "title": "HolesFilling",
+    "section": "",
+    "text": "This is an abstract class that can not be used directly. In order to use it, it is necessary to use its inherited classes.\n\nsource\n\nHolesFilling\n\n HolesFilling (modifier:RegionModifier=None,\n               hole_maker:HoleMakerTechnique=None)\n\nDefines the strategy used to make the holes.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\n\nThe default technique used to make those holes is the HoleMakerRandom technique.\n\nsource\n\n\nHolesFilling.make_hole\n\n HolesFilling.make_hole (mask)\n\nMakes the holes in the mask.\n\n\n\n\n\n\n\n\nDetails\n\n\n\n\nmask\nThe mask associated with the image where the hole is going to be made.\n\n\n\nThe make_hole function calls the get_hole function of the HoleMakerTechnique used.\n\nsource\n\n\nHolesFilling.fill_hole\n\n HolesFilling.fill_hole (image:numpy.ndarray, mask:numpy.ndarray,\n                         xhole:slice, yhole:slice, fill_values:Union[Calla\n                         ble[[numpy.ndarray],numpy.ndarray],numpy.ndarray,\n                         float], transparence:bool=False)\n\nFills a specific hole with something.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nimage\nndarray\n\nThe image where the hole is going to be made.\n\n\nmask\nndarray\n\nThe mask associated with the image where the hole is going to be made.\n\n\nxhole\nslice\n\nThe slice that defines the x-region where the hole is.\n\n\nyhole\nslice\n\nThe slice that defines the y-region where the hole is.\n\n\nfill_values\ntyping.Union[typing.Callable[[numpy.ndarray], numpy.ndarray], numpy.ndarray, float]\n\nThe value to fill the hole (a function to apply or a constant).\n\n\ntransparence\nbool\nFalse\nWhether the fill_values must be added to the image in a transparent form. fill_value if fill_value else image for each value in fill_values\n\n\n\nThe fill_values parameter defines what is used to fill the hole. It can be a callable (another function that is applied to the image and to the mask to select something inside them) or a constant value."
+  },
+  {
+    "objectID": "CHANGELOG.html",
+    "href": "CHANGELOG.html",
+    "title": "semantic_segmentation_augmentations",
+    "section": "",
+    "text": "cv2 resize function (#2)\n\nThe call to this function in class CutMixResizeMix is incorrect\n\n\n\n\n\n\n\n\n\nName random is not defined (#1)\n\nIt is needed to add the random module."
+  },
+  {
+    "objectID": "holemakerbounded.html",
+    "href": "holemakerbounded.html",
+    "title": "HoleMakerBounded",
+    "section": "",
+    "text": "HoleMakerBounded randomly selects the region to be replaced. The only condition is that the region can not be outbounded of the image.\n\nsource\n\nHoleMakerBounded\n\n HoleMakerBounded (hole_size:tuple=(100, 100))\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nhole_size\ntuple\n(100, 100)\nThe size of the hole in a tuple like (y, x).\n\n\n\n\nsource\n\n\nHoleMakerBounded.get_hole\n\n HoleMakerBounded.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the hole is going to be made."
+  },
+  {
+    "objectID": "selfmix.html",
+    "href": "selfmix.html",
+    "title": "SelfMix",
+    "section": "",
+    "text": "source\n\nSelfMix\n\n SelfMix (holes_num:int=1, ROI_class:int=-1, modifier:RegionModifier=None,\n          p:float=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nROI_class\nint\n-1\nThe class to be used to select the ROI.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nSelfMix technique extracts a ROI and overlaps it, with transparece, in another image.\nIn our library, SelfMix is just a particular case of TranspareceMix with a HoleMakerROI technique.\nThe definition and implementation of this technique can be found here.\n\nsource\n\n\nTransparenceMix.before_batch\n\n TransparenceMix.before_batch ()\n\nApplies the CutMix technique."
+  },
+  {
+    "objectID": "artmix.html",
+    "href": "artmix.html",
+    "title": "ArtMix",
+    "section": "",
+    "text": "source\n\nArtMix\n\n ArtMix (mask_path:str, holes_num:int=1, use_black:bool=True,\n         modifier:RegionModifier=None, hole_maker:HoleMakerTechnique=None,\n         p:float=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nmask_path\nstr\n\nThe path to the image that is going to be used as mask.\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nuse_black\nbool\nTrue\nWhether to use the black part of the mask or the white part of the mask.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nTranspareceMix allows us to fuse two images with the transparence idea. That is: if the overlapping mask has some information (it is not 0 in that position), its value is selected. Otherwise, if the overlapping mask has no information in that pixel, the information of the second image is used to fulfill the final image. Thus allows us to preserve as maximum information as possible, since these information is selected before using the background class.\n\nsource\n\n\nArtMix.before_batch\n\n ArtMix.before_batch ()\n\nApplies the CutMix technique."
+  },
+  {
+    "objectID": "iholemakertechnique.html",
+    "href": "iholemakertechnique.html",
+    "title": "HoleMakerTechnique",
+    "section": "",
+    "text": "This is an abstract class that can not be used directly. In order to use it, it is necessary to use its inherited classes.\n\nsource\n\nHoleMakerTechnique\n\n HoleMakerTechnique (hole_size:tuple=(100, 100))\n\nDefines the size of the hole.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nhole_size\ntuple\n(100, 100)\nThe size of the hole in a tuple like (y, x).\n\n\n\n\nsource\n\n\nHoleMakerTechnique.get_hole\n\n HoleMakerTechnique.get_hole (mask:numpy.ndarray)\n\nDefines how to make the hole.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nmask\nndarray\nThe mask associated with the image where the hole is going to be made."
+  },
+  {
+    "objectID": "ricap.html",
+    "href": "ricap.html",
+    "title": "RICAP",
+    "section": "",
+    "text": "source\n\nRICAP\n\n RICAP (t:float=0.0, u:float=None, modifier:RegionModifier=None,\n        hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nt\nfloat\n0.0\nThe restriction of the central-boundary position. If 0.0, the central point is selected randomly. If not, the central point is restricted into [t * size, (1-t) * size] area.\n\n\nu\nfloat\nNone\nThe restriction of the corner-boundary position. If None, t hparam is used. If not, t hparam is ignored and u hparam is used to restrict the central point into a [0, u * size] U [(1-u) * size, size] area.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerPoint technique.\nThis technique was defined and implemented here.\n\nsource\n\n\nRICAP.before_batch\n\n RICAP.before_batch ()\n\nApplies the CutMixRICAP technique (divides the image into a grid and shuffles the portions)."
+  },
+  {
+    "objectID": "cutoutsemantic.html",
+    "href": "cutoutsemantic.html",
+    "title": "CutOutSemantic",
+    "section": "",
+    "text": "source\n\nCutOutSemantic\n\n CutOutSemantic (holes_num=1, occlusion_class=-1,\n                 modifier:RegionModifier=None,\n                 hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the class to be occluded, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nocclusion_class\nint\n-1\nThe class to remove. If -1, selects it randomly in each use.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerRandom technique.\nCutOut technique was defined and implemented here.\n\nsource\n\n\nCutOutSemantic.before_batch\n\n CutOutSemantic.before_batch ()\n\nApplies the CutOut technique with semantic information (only applies the CutOut to a selected class)."
+  },
+  {
+    "objectID": "hideandseek.html",
+    "href": "hideandseek.html",
+    "title": "HideAndSeek",
+    "section": "",
+    "text": "source\n\nHideAndSeek\n\n HideAndSeek (deactivation_p=0.1, modifier:RegionModifier=None,\n              hole_maker:HoleMakerTechnique=None, p=0.5)\n\nDefines the amount of holes, the probability of deactivation, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndeactivation_p\nfloat\n0.1\nThe probability of deactivate a region.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nhole_maker\nHoleMakerTechnique\nNone\nThe strategy used to make the holes.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe default technique used to make those holes is the HoleMakerPoint technique.\nHideAndSeek technique was defined and implemented here.\n\nsource\n\n\nHideAndSeek.before_batch\n\n HideAndSeek.before_batch ()\n\nApplies the Hide & Seek technique (divides the image into a grid and deactivates some portions with a determinated probability)."
+  },
+  {
+    "objectID": "carvemix.html",
+    "href": "carvemix.html",
+    "title": "CarveMix",
+    "section": "",
+    "text": "source\n\nCarveMix\n\n CarveMix (holes_num:int=1, modifier:RegionModifier=None,\n           ROI_class:int=-1, ROI_area:int=25, delta_ratio:float=None,\n           random_position:bool=False, p:float=0.5)\n\nDefines the amount of holes, the technique used to make them and the probability of apply the technique.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nholes_num\nint\n1\nThe amount of holes to make.\n\n\nmodifier\nRegionModifier\nNone\nThe modifier that defines the traditional augments to apply to the selected regions.\n\n\nROI_class\nint\n-1\nThe class to be used to select the ROI.\n\n\nROI_area\nint\n25\nThe minimum area to be selected as a ROI.\n\n\ndelta_ratio\nfloat\nNone\nThe ratio of pixels of the ROI that are going to be used. A ratio of 1 takes all the ROI pixels, a ratio < 1 crops the ROI and a ratio > 1 adds more pixels to the ROI. A None ratio takes a random value [0.9, 1.1) in each usage.\n\n\nrandom_position\nbool\nFalse\nWhether the ROI should be added randomly in the image or in the same position it was extracted.\n\n\np\nfloat\n0.5\nThe probability of applying this technique.\n\n\n\nThe CarveMix technique is a derivation of the CutMixRandom technique with a HoleMakerRandom technique.\nHowever, CarveMix behavior can not be achieved using there techniques together, because of the implementation of the CutMixRandom technique, which takes a hole from the image that is been seen by the model instead of another image of the batch. CarveMix needs to take another image of the batch to properly work.\nThis technique was defined and implemented here.\nThis technique has been generalized to be implemented in this library, in order to be usefull in multiple class segmentation too.\n\nsource\n\n\nCarveMix.before_batch\n\n CarveMix.before_batch ()\n\nApplies the CutMix technique."
+  }
+]
