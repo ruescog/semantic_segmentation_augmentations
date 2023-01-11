@@ -34,7 +34,6 @@ class CutOutRandom(HolesFilling):
         
         for image, mask in zip(self.x, self.y):
             if random.random() < self.p:
-                min_image = torch.min(image)
                 for _ in range(self.holes_num):
                     xhole, yhole = self.make_hole(mask)
-                    self.fill_hole(image, mask, xhole, yhole, [min_image, 0])
+                    self.fill_hole(image, mask, xhole, yhole, [torch.min(image), 0])
